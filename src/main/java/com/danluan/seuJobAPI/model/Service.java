@@ -3,22 +3,21 @@ package com.danluan.seuJobAPI.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_job")
-public class Job {
+@Table(name = "tb_service")
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @JoinColumn(name = "freelancer_id", referencedColumnName = "id")
+    private Freelancer freelancer;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;
 
     @Column(nullable = false, length = 100)
@@ -30,38 +29,50 @@ public class Job {
     @Column(nullable = false, length = 100)
     private String location;
 
-    @Column(nullable = false, length = 100)
-    private String contractType;
-
     @Column(nullable = false)
-    private Float salary;
+    private Float remuneration;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "publish_date", updatable = false)
     private Date publishDate;
 
-    public Job(String title, String description, String location, String contractType, Float salary) {
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, name = "end_date")
+    private Date endDate;
+
+    public Service() {}
+
+    public Service(String title, String description, String location, Float remuneration, Date endDate) {
         this.title = title;
         this.description = description;
         this.location = location;
-        this.contractType = contractType;
-        this.salary = salary;
-    }
-
-    public Job() {
+        this.remuneration = remuneration;
+        this.endDate = endDate;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Company getCompany() {
-        return company;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public Freelancer getFreelancer() {
+        return freelancer;
+    }
+
+    public void setFreelancer(Freelancer freelancer) {
+        this.freelancer = freelancer;
+    }
+
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 
     public String getTitle() {
@@ -88,32 +99,27 @@ public class Job {
         this.location = location;
     }
 
-    public String getContractType() {
-        return contractType;
+    public Float getRemuneration() {
+        return remuneration;
     }
 
-    public void setContractType(String contractType) {
-        this.contractType = contractType;
-    }
-
-    public Float getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Float salary) {
-        this.salary = salary;
+    public void setRemuneration(Float remuneration) {
+        this.remuneration = remuneration;
     }
 
     public Date getPublishDate() {
         return publishDate;
     }
 
-    public List<Application> getApplications() {
-        return applications;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
-    public void setApplications(List<Application> applications) {
-        this.applications = applications;
+    public Date getEndDate() {
+        return endDate;
     }
 
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 }

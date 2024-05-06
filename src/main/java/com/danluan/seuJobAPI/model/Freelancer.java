@@ -3,8 +3,9 @@ package com.danluan.seuJobAPI.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_company")
-public class Company {
+@Table(name = "tb_freelancer")
+public class Freelancer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -13,10 +14,10 @@ public class Company {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Company() {
+    public Freelancer () {
     }
 
-    public Company(User user) {
+    public Freelancer(User user) {
         this.user = user;
     }
 

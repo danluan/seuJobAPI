@@ -15,8 +15,8 @@ public class Resume {
     private Integer id;
 
     @OneToOne(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "worker_id", referencedColumnName = "user_id")
+    private Worker worker;
 
     @Column(nullable = false, length = 500)
     private String experiences;
@@ -54,12 +54,12 @@ public class Resume {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Worker getWorker() {
+        return worker;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
     public String getExperiences() {

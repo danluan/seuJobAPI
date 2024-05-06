@@ -1,10 +1,11 @@
 package com.danluan.seuJobAPI.model;
 
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_company")
-public class Company {
+@Table(name = "tb_worker")
+public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -13,11 +14,16 @@ public class Company {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Company() {
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "resume_id", referencedColumnName = "id")
+    private Resume resume;
+
+    public Worker() {
     }
 
-    public Company(User user) {
+    public Worker(User user, Resume resume) {
         this.user = user;
+        this.resume = resume;
     }
 
     public Integer getId() {
@@ -34,5 +40,13 @@ public class Company {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Resume getResume() {
+        return resume;
+    }
+
+    public void setResume(Resume resume) {
+        this.resume = resume;
     }
 }
