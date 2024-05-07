@@ -9,15 +9,19 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @Column(length = 14)
+    private String cnpj;
 
     public Company() {
     }
 
-    public Company(User user) {
+    public Company(User user, String cnpj) {
         this.user = user;
+        this.cnpj = cnpj;
     }
 
     public Integer getId() {

@@ -23,8 +23,8 @@ public class Application {
     private Service service;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "worker_id")
+    private Worker worker;
 
     @Column()
     private ApplicationStatus status;
@@ -37,9 +37,9 @@ public class Application {
     public Application() {
     }
 
-    public Application(Job job, User user) {
+    public Application(Job job, Worker worker) {
         this.job = job;
-        this.user = user;
+        this.worker = worker;
     }
 
 
@@ -51,12 +51,12 @@ public class Application {
         this.job = job;
     }
 
-    public User getUser() {
-        return user;
+    public Worker getWorker() {
+        return worker;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
     public ApplicationStatus getStatus() {
