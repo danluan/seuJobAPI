@@ -41,11 +41,11 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authz) ->                                     
             authz
-                .requestMatchers("/api/clientes/**")
-                    .hasAnyRole("USER","ADMIN")
-                .requestMatchers("/api/produtos/**")
+                .requestMatchers("/api/auth/**")
+                    .permitAll()
+                .requestMatchers("/api/worker")
                     .hasRole("ADMIN")
-                
+
             )
             /*sessionManagement
              * é um método usado para configurar a política de criação de sessão 
