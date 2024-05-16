@@ -1,4 +1,4 @@
-package com.danluan.seuJobAPI.dto;
+package com.danluan.seuJobAPI.model.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

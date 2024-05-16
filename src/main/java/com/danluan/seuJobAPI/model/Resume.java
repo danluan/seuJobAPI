@@ -97,5 +97,4 @@ public class Resume {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-
 }

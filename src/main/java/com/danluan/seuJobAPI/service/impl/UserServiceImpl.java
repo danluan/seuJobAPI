@@ -1,20 +1,16 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import com.danluan.seuJobAPI.dto.UserDTO;
+import com.danluan.seuJobAPI.model.dto.UserDTO;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
 import com.danluan.seuJobAPI.model.User;
-import com.danluan.seuJobAPI.repository.AdminRepository;
 import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

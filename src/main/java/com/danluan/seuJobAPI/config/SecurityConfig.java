@@ -41,15 +41,10 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authz) ->                                     
             authz
-                .requestMatchers(HttpMethod.POST, "/api/auth/**")
-                    .permitAll()
                 .requestMatchers("/api/clientes/**")
                     .hasAnyRole("USER","ADMIN")
                 .requestMatchers("/api/produtos/**")
                     .hasRole("ADMIN")
-                .requestMatchers("/api/pedidos/**") 
-                    .hasAnyRole("USER","ADMIN") 
-                .anyRequest().authenticated()
                 
             )
             /*sessionManagement
