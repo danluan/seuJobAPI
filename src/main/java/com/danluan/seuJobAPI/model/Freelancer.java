@@ -1,8 +1,12 @@
 package com.danluan.seuJobAPI.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "tb_freelancer")
 public class Freelancer {
 
@@ -18,22 +22,6 @@ public class Freelancer {
     }
 
     public Freelancer(User user) {
-        this.user = user;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
 }

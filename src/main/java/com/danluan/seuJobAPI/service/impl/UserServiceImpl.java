@@ -1,9 +1,9 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.model.*;
 import com.danluan.seuJobAPI.model.dto.UserDTO;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
-import com.danluan.seuJobAPI.model.User;
-import com.danluan.seuJobAPI.repository.UserRepository;
+import com.danluan.seuJobAPI.repository.*;
 import com.danluan.seuJobAPI.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,9 +24,41 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private WorkerRepository workerRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
+
     @Transactional
     public User save(UserDTO userDTO) {
         User user = dtoParaUser(userDTO);
+        List<String> roles = userDTO.getRoles();
+
+        if(roles.contains("ADMIN")){
+            Admin admin = new Admin();
+            admin.setUser(user);
+            adminRepository.save(admin);
+        } if (roles.contains("WORKER")){
+             Worker worker = new Worker();
+             worker.setUser(user);
+             workerRepository.save(worker);
+        } if (roles.contains("COMPANY")){
+            Company company = new Company();
+            company.setUser(user);
+            companyRepository.save(company);
+        } if (roles.contains("FREELANCER")){
+            Freelancer freelancer = new Freelancer();
+            freelancer.setUser(user);
+            freelancerRepository.save(freelancer);
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -39,8 +73,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
-        //String[] roles = user.isAdmin() ? new String[] { "ADMIN", "USER" } : new String[] { "USER" };
-        String[] roles = { "ADMIN" };
+         String[] roles = user.isAdmin() ? new String[] { "ADMIN", "USER" } : new String[] { "USER" };
 
         // Cria e retorna o objeto UserDetails com os detalhes do usuário
         return org.springframework.security.core.userdetails.User
@@ -73,5 +106,28 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    public UserDTO userParaDTO(User user){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(user.getLogin());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setName(user.getName());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setPhone(user.getPhoneNumber());
+
+        return userDTO;
+    }
+
+    public UserDTO getUserDTOById(int id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user == null ? null : userParaDTO(user);
+    }
+
+    public UserDTO update(UserDTO userDTO) {
+        User user = dtoParaUser(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userParaDTO(userRepository.save(user));
+    }
+
 
 }

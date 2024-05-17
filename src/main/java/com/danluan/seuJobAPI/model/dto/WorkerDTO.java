@@ -16,8 +16,11 @@ public class WorkerDTO {
     private String name;
     private String email;
     private String login;
-    private String password;
     private String phone;
     private ResumeDTO resume;
     private List<Application> applications;
+
+    public WorkerDTO(Integer userId) {
+        this.id = userId;
+    }
 }

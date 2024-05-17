@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.config;
 
+import com.danluan.seuJobAPI.enums.UserRoles;
 import com.danluan.seuJobAPI.security.JwtAuthFilter;
 import com.danluan.seuJobAPI.security.JwtService;
 import com.danluan.seuJobAPI.service.impl.UserServiceImpl;
@@ -41,10 +42,12 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authz) ->                                     
             authz
-                .requestMatchers("/api/auth/**")
+                    .anyRequest()
                     .permitAll()
-                .requestMatchers("/api/worker")
-                    .hasRole("ADMIN")
+//                .requestMatchers("/api/auth/**")
+//                    .permitAll()
+//                .requestMatchers("/api/worker")
+//                    .hasRole("USER")
 
             )
             /*sessionManagement

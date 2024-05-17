@@ -67,7 +67,6 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-        workerDTO.setResume(new ResumeDTO(worker.getResume()));
 
         return workerDTO;
     }

@@ -50,4 +50,9 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+    @PutMapping
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+        return userService.update(userDTO);
+    }
 }
