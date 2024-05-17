@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,35 +38,47 @@ public class UserServiceImpl implements UserService {
     private AdminRepository adminRepository;
 
     @Transactional
-    public User save(UserDTO userDTO) {
+    public UserDTO save(UserDTO userDTO) {
         User user = dtoParaUser(userDTO);
+        extractRolesByList(userDTO, user);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userParaDTO(userRepository.save(user));
+    }
+
+    private void extractRolesByList(UserDTO userDTO, User user) {
         List<String> roles = userDTO.getRoles();
 
         if(roles.contains("ADMIN")){
             Admin admin = new Admin();
             admin.setUser(user);
             adminRepository.save(admin);
-        } if (roles.contains("WORKER")){
+        }
+        if (roles.contains("WORKER")){
              Worker worker = new Worker();
              worker.setUser(user);
              workerRepository.save(worker);
-        } if (roles.contains("COMPANY")){
+        }
+        if (roles.contains("COMPANY")){
             Company company = new Company();
             company.setUser(user);
             companyRepository.save(company);
-        } if (roles.contains("FREELANCER")){
+        }
+        if (roles.contains("FREELANCER")){
             Freelancer freelancer = new Freelancer();
             freelancer.setUser(user);
             freelancerRepository.save(freelancer);
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
     }
 
     @Override
     public User getUserById(int id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public UserDTO getUserDTOById(int id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user == null ? null : userParaDTO(user);
     }
 
     public UserDetails loadUserByLogin(String login) {
@@ -109,22 +122,32 @@ public class UserServiceImpl implements UserService {
 
     public UserDTO userParaDTO(User user){
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setLogin(user.getLogin());
         userDTO.setEmail(user.getEmail());
         userDTO.setName(user.getName());
         userDTO.setPassword(user.getPassword());
         userDTO.setPhone(user.getPhoneNumber());
-
+        userDTO.setRoles(user.getRolesByUser());
         return userDTO;
     }
 
-    public UserDTO getUserDTOById(int id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user == null ? null : userParaDTO(user);
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(this::userParaDTO).collect(Collectors.toList());
     }
 
+
     public UserDTO update(UserDTO userDTO) {
-        User user = dtoParaUser(userDTO);
+        User user = getUserById(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(userDTO.getPassword());
+        user.setPhoneNumber(userDTO.getPhone());
+
+        extractRolesByList(userDTO, user);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userParaDTO(userRepository.save(user));
     }

@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public User salvar( @RequestBody @Valid UserDTO userDTO ){
+    public UserDTO salvar( @RequestBody @Valid UserDTO userDTO ){
         return userService.save(userDTO);
     }
 

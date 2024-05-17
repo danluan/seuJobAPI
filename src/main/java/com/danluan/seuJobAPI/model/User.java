@@ -59,4 +59,21 @@ public class User {
     public boolean isAdmin() {
         return !admins.isEmpty();
     }
+
+    public List<String> getRolesByUser(){
+        List<String> roles = new ArrayList<>();
+        if(!companies.isEmpty()){
+            roles.add("COMPANY");
+        }
+        if(!workers.isEmpty()){
+            roles.add("WORKER");
+        }
+        if(!freelancers.isEmpty()){
+            roles.add("FREELANCER");
+        }
+        if(!admins.isEmpty()){
+            roles.add("ADMIN");
+        }
+        return roles;
+    }
 }
