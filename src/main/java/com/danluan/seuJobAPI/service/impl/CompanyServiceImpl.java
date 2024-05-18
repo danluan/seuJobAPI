@@ -4,10 +4,13 @@ import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Company;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.dto.CompanyDTO;
+import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
 import com.danluan.seuJobAPI.repository.CompanyRepository;
+import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -16,9 +19,13 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
+    public PasswordEncoder passwordEncoder;
+    @Autowired
     private CompanyRepository companyRepository;
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<CompanyDTO> getAllCompanies() {
@@ -28,7 +35,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO getCompanyById(Integer id) {
-        return null;
+        Company company = companyRepository.findById(id).orElse(null);
+        return company == null ? null : toDTO(company);
     }
 
     @Override
@@ -45,8 +53,21 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDTO updateCompany(CompanyDTO companyDTO) {
-        return null;
+    public CompanyDTO updateCompany(CompanyUpdateDTO companyUpdateDTO) {
+        Company company = companyRepository.findById(companyUpdateDTO.getId()).orElse(null);
+        if(company == null) {
+            return null;
+        }
+
+        company.setCnpj(companyUpdateDTO.getCnpj());
+        User user = company.getUser();
+        user.setName(companyUpdateDTO.getName());
+        user.setEmail(companyUpdateDTO.getEmail());
+        user.setPhoneNumber(companyUpdateDTO.getPhone());
+
+        userRepository.save(user);
+
+        return this.toDTO(companyRepository.save(company));
     }
 
     @Override
