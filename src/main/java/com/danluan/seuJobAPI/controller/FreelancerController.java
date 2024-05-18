@@ -31,4 +31,9 @@ public class FreelancerController {
         return freelancerService.createFreelancer(freelancerDTO);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteFreelancer(@PathVariable Integer id) {
+        freelancerService.deleteFreelancer(id);
+    }
+
 }

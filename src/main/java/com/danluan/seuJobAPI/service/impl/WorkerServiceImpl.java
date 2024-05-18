@@ -8,6 +8,7 @@ import com.danluan.seuJobAPI.model.dto.ResumeDTO;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.WorkerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,9 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public WorkerDTO getWorkerById(Integer id) {
-        Worker worker = workerRepository.findById(id).orElse(null);
-        return worker == null ? null : toDTO(worker);
+        Worker worker = workerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Worker not found for ID: " + id));
+        return toDTO(worker);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
         //TODO: adicionar Resume ao Worker por aqui att Daniel
-        //workerDTO.setResume(worker.getResume());
+        //workerDTO.setResume(worker.getResume());'
         return workerDTO;
     }
 

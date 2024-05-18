@@ -9,6 +9,7 @@ import com.danluan.seuJobAPI.repository.CompanyRepository;
 import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.CompanyService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO getCompanyById(Integer id) {
-        Company company = companyRepository.findById(id).orElse(null);
-        return company == null ? null : toDTO(company);
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
+        return toDTO(company);
     }
 
     @Override

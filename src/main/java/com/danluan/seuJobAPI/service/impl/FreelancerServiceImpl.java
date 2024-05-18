@@ -7,6 +7,7 @@ import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.model.dto.FreelancerUpdateDTO;
 import com.danluan.seuJobAPI.repository.FreelancerRepository;
 import com.danluan.seuJobAPI.service.FreelancerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,9 @@ public class FreelancerServiceImpl implements FreelancerService {
 
     @Override
     public FreelancerDTO getFreelancerById(Integer id) {
-        Freelancer freelancer = freelancerRepository.findById(id).orElse(null);
-        return freelancer == null ? null : toDTO(freelancer);
+        Freelancer freelancer = freelancerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
+        return toDTO(freelancer);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class FreelancerServiceImpl implements FreelancerService {
 
     @Override
     public void deleteFreelancer(Integer id) {
-
+        freelancerRepository.deleteById(id);
     }
 
     @Override
@@ -61,6 +63,9 @@ public class FreelancerServiceImpl implements FreelancerService {
         freelancerDTO.setUserId(freelancer.getUser().getId());
         freelancerDTO.setName(freelancer.getUser().getName());
         freelancerDTO.setEmail(freelancer.getUser().getEmail());
+        freelancerDTO.setLogin(freelancer.getUser().getLogin());
+        freelancerDTO.setPhone(freelancer.getUser().getPhoneNumber());
+        //TODO: adicionar aqui a lista de services
         return freelancerDTO;
     }
 

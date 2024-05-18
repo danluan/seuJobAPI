@@ -16,5 +16,5 @@ public class FreelancerDTO {
     private String email;
     private String login;
     private String phone;
-    private List<ServiceDTO> jobs;
+    private List<ServiceDTO> services;
 }
