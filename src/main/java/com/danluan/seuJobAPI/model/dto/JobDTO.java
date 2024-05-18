@@ -1,6 +1,17 @@
 package com.danluan.seuJobAPI.model.dto;
 
-public class JobDTO {
-    //ToDo: implementar baseado no modelo do banco (apresentando lista de Applications)
+import lombok.*;
 
+@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class JobDTO {
+    String description;
+    String contract_type;
+    String location;
+    String title;
+    String salary;
+    String publish_date;
 }

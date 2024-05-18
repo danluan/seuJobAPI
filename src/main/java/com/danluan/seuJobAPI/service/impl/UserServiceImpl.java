@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.exception.LoginAlreadyInUse;
 import com.danluan.seuJobAPI.model.*;
 import com.danluan.seuJobAPI.model.dto.UserDTO;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
@@ -39,10 +40,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserDTO save(UserDTO userDTO) {
-        User user = dtoParaUser(userDTO);
+        if (existsLogin(userDTO.getLogin())) {
+            User user = dtoParaUser(userDTO);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userParaDTO(userRepository.save(user));
+        } else {
+            throw new LoginAlreadyInUse();
+        }
+    }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userParaDTO(userRepository.save(user));
+    public Boolean existsLogin(String login) {
+        return userRepository.findByLogin(login).isPresent();
     }
 
     private void extractRolesByList(UserDTO userDTO, User user) {

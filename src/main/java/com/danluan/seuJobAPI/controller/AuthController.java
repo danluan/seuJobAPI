@@ -31,12 +31,6 @@ public class AuthController {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/new")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO salvar( @RequestBody @Valid UserDTO userDTO ){
-        return userService.save(userDTO);
-    }
-
     @PostMapping
     public TokenDTO auth(@RequestBody CredenciaisDTO credenciais) {
         try{
