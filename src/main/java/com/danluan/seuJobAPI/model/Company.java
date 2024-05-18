@@ -25,5 +25,6 @@ public class Company {
     }
 
     public Company(User user) {
+        this.user = user;
     }
 }
