@@ -1,6 +1,8 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Resume;
+import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.Worker;
 import com.danluan.seuJobAPI.model.dto.ResumeDTO;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
@@ -16,6 +18,9 @@ public class WorkerServiceImpl implements WorkerService {
     @Autowired
     private WorkerRepository workerRepository;
 
+    @Autowired
+    private UserServiceImpl userService;
+
     @Override
     public List<WorkerDTO> getAllWorkers() {
         List<Worker> workers = workerRepository.findAll();
@@ -30,12 +35,17 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public WorkerDTO createWorker(WorkerDTO workerDTO) {
+        if(workerRepository.findByUserId(workerDTO.getUserId()).isPresent()) {
+            throw new UserIdAlreadyInUse();
+        }
+
+        User user = userService.getUserById(workerDTO.getUserId());
         Worker worker = new Worker();
-        worker.getUser().setName(workerDTO.getName());
-        worker.getUser().setEmail(workerDTO.getEmail());
-        worker.getUser().setLogin(workerDTO.getLogin());
-        worker.getUser().setPhoneNumber(workerDTO.getPhone());
-        return toDTO(workerRepository.save(worker));
+
+        worker.setUser(user);
+
+        return this.toDTO(workerRepository.save(worker));
+
     }
 
     @Override
@@ -63,11 +73,13 @@ public class WorkerServiceImpl implements WorkerService {
     public WorkerDTO toDTO (Worker worker) {
         WorkerDTO workerDTO = new WorkerDTO();
         workerDTO.setId(worker.getId());
+        workerDTO.setUserId(worker.getUser().getId());
         workerDTO.setName(worker.getUser().getName());
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-
+        //TODO: add resume to workerDTO :P att Daniel
+        //workerDTO.setResume(worker.getResume());
         return workerDTO;
     }
 

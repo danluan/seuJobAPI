@@ -1,5 +1,8 @@
 package com.danluan.seuJobAPI.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRoles {
     ADMIN("ADMIN"),
     USER("USER"),
@@ -13,7 +16,4 @@ public enum UserRoles {
         this.role = role;
     }
 
-    public String getRole() {
-        return role;
-    }
 }

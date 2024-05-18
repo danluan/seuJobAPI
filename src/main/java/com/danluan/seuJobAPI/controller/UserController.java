@@ -30,4 +30,9 @@ public class UserController {
         userDTO.setId(id);
         return userService.update(userDTO);
     }
+
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        userService.delete(id);
+    }
 }

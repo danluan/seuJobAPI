@@ -20,12 +20,11 @@ public class UserDTO {
     private String phone;
     private List<String> roles;
 
-    public UserDTO(String name, String email, String login, String password, String phone, List<String> roles) {
+    public UserDTO(String name, String email, String login, String password, String phone) {
         this.name = name;
         this.email = email;
         this.login = login;
         this.password = password;
         this.phone = phone;
-        this.roles = roles;
     }
 }

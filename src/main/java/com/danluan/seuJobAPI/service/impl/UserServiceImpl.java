@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO save(UserDTO userDTO) {
         User user = dtoParaUser(userDTO);
-        extractRolesByList(userDTO, user);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userParaDTO(userRepository.save(user));
@@ -50,22 +49,22 @@ public class UserServiceImpl implements UserService {
         List<String> roles = userDTO.getRoles();
 
         if(roles.contains("ADMIN")){
-            Admin admin = new Admin();
+            Admin admin = new Admin(user);
             admin.setUser(user);
             adminRepository.save(admin);
         }
         if (roles.contains("WORKER")){
-             Worker worker = new Worker();
+             Worker worker = new Worker(user);
              worker.setUser(user);
              workerRepository.save(worker);
         }
         if (roles.contains("COMPANY")){
-            Company company = new Company();
+            Company company = new Company(user);
             company.setUser(user);
             companyRepository.save(company);
         }
         if (roles.contains("FREELANCER")){
-            Freelancer freelancer = new Freelancer();
+            Freelancer freelancer = new Freelancer(user);
             freelancer.setUser(user);
             freelancerRepository.save(freelancer);
         }
@@ -95,7 +94,6 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .roles(roles)
                 .build();
-
     }
 
     public UserDetails autenticar( User user ){
@@ -152,5 +150,7 @@ public class UserServiceImpl implements UserService {
         return userParaDTO(userRepository.save(user));
     }
 
-
+    public void delete(Integer id) {
+        userRepository.deleteById(id);
+    }
 }

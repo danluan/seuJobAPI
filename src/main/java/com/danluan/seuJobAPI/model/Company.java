@@ -24,8 +24,6 @@ public class Company {
     public Company() {
     }
 
-    public Company(User user, String cnpj) {
-        this.user = user;
-        this.cnpj = cnpj;
+    public Company(User user) {
     }
 }

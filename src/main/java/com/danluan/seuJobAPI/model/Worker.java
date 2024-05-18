@@ -31,8 +31,7 @@ public class Worker {
     public Worker() {
     }
 
-    public Worker(User user, Resume resume) {
+    public Worker(User user) {
         this.user = user;
-        this.resume = resume;
     }
 }

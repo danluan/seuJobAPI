@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query(value = "select u from User u where u.login like %:login%")
+    @Query(value = "select u from User u where u.login = :login")
     Optional<User> findByLogin(String login);
 }

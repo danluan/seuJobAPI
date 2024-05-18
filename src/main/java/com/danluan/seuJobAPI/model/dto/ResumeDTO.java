@@ -31,4 +31,10 @@ public class ResumeDTO {
         this.skills = resume.getSkills();
         this.creationDate = resume.getCreationDate();
     }
+
+    public ResumeDTO(String experiences, String education, String skills) {
+        this.experience = experiences;
+        this.education = education;
+        this.skills = skills;
+    }
 }

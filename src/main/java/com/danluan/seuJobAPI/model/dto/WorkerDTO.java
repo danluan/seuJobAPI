@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class WorkerDTO {
     private Integer id;
+    private Integer userId;
     private String name;
     private String email;
     private String login;
