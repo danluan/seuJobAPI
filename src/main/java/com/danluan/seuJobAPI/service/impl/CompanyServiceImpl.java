@@ -19,8 +19,6 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
-    public PasswordEncoder passwordEncoder;
-    @Autowired
     private CompanyRepository companyRepository;
     @Autowired
     private UserServiceImpl userService;
