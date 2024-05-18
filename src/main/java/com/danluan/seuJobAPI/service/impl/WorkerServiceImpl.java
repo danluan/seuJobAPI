@@ -64,7 +64,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public void updateWorkerResume(Integer id, Resume resume) {
-        Worker user = workerRepository.findById(id).orElse(null);;
+        Worker user = workerRepository.findById(id).orElse(null);
         user.setResume(resume);
         workerRepository.save(user);
     }
@@ -78,7 +78,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-        //TODO: add resume to workerDTO :P att Daniel
+        //TODO: adicionar Resume ao Worker por aqui att Daniel
         //workerDTO.setResume(worker.getResume());
         return workerDTO;
     }
