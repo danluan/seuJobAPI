@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserDTO save(UserDTO userDTO) {
-        if (existsLogin(userDTO.getLogin())) {
+        if (!existsLogin(userDTO.getLogin())) {
             User user = dtoParaUser(userDTO);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userParaDTO(userRepository.save(user));
