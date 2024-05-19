@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.exception.JobNotFound;
 import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.Job;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +37,12 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO getJobById(Integer id) {
-        return null;
+        Optional<Job> job = jobRepository.findById(id);
+        if (job.isPresent()) {
+            return toDTO(job.get());
+        } else {
+            throw new JobNotFound();
+        }
     }
 
     @Override
@@ -50,8 +57,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void deleteFreelancer(Integer id) {
-
+    public void deleteJob(Integer id) {
+        Optional<Job> job = jobRepository.findById(id);
+        if (job.isPresent()) {
+            jobRepository.delete(job.get());
+        } else {
+            throw new JobNotFound();
+        }
     }
 
     @Override

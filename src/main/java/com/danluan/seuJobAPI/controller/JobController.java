@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.controller;
 
+import com.danluan.seuJobAPI.exception.JobNotFound;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
 import com.danluan.seuJobAPI.model.Job;
 import com.danluan.seuJobAPI.model.User;
@@ -50,4 +51,14 @@ public class JobController {
         return jobService.save(job);
     }
 
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public String delete(@PathVariable Integer id) {
+        try {
+            jobService.deleteJob(id);
+            return "Job deleted";
+        } catch (JobNotFound e) {
+            return e.getMessage();
+        }
+    }
 }

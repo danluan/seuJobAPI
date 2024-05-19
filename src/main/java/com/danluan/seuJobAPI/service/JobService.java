@@ -13,7 +13,7 @@ public interface JobService {
     JobDTO getJobById(Integer id);
     JobDTO save(JobDTO jobDTO);
     JobDTO updateJob(JobDTO jobDTO);
-    void deleteFreelancer(Integer id);
+    void deleteJob(Integer id);
     JobDTO toDTO(Job job);
     Job toEntity(JobDTO jobDTO);
 }
