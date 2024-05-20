@@ -1,6 +1,7 @@
 package com.danluan.seuJobAPI.controller;
 
 import com.danluan.seuJobAPI.model.dto.ResumeDTO;
+import com.danluan.seuJobAPI.model.dto.ResumeUpdateDTO;
 import com.danluan.seuJobAPI.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ResumeController {
     }
 
     @PutMapping("/{id}")
-    public ResumeDTO updateResume(@PathVariable Integer id, @RequestBody ResumeDTO resumeDTO) {
+    public ResumeDTO updateResume(@PathVariable Integer id, @RequestBody ResumeUpdateDTO resumeDTO) {
         return resumeService.updateResume(id, resumeDTO);
     }
 

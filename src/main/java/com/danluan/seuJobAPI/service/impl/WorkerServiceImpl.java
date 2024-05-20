@@ -4,7 +4,7 @@ import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Resume;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.Worker;
-import com.danluan.seuJobAPI.model.dto.ResumeDTO;
+import com.danluan.seuJobAPI.model.dto.ResumeUpdateDTO;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.WorkerService;
@@ -87,7 +87,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
         //TODO: adicionar Resume ao Worker por aqui att Daniel
-        //workerDTO.setResume(worker.getResume());'
+        workerDTO.setResume(new ResumeUpdateDTO(worker.getResume()));
         return workerDTO;
     }
 

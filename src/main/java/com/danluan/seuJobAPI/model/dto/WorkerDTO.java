@@ -1,7 +1,6 @@
 package com.danluan.seuJobAPI.model.dto;
 
 import com.danluan.seuJobAPI.model.Application;
-import com.danluan.seuJobAPI.model.Resume;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class WorkerDTO {
     private String email;
     private String login;
     private String phone;
-    private ResumeDTO resume;
+    private ResumeUpdateDTO resume;
     private List<Application> applications;
 
     public WorkerDTO(Integer userId) {

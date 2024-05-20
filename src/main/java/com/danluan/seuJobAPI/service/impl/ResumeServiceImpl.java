@@ -4,6 +4,7 @@ import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Resume;
 import com.danluan.seuJobAPI.model.Worker;
 import com.danluan.seuJobAPI.model.dto.ResumeDTO;
+import com.danluan.seuJobAPI.model.dto.ResumeUpdateDTO;
 import com.danluan.seuJobAPI.repository.ResumeRepository;
 import com.danluan.seuJobAPI.service.ResumeService;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,7 +48,7 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public ResumeDTO updateResume(Integer id, ResumeDTO resumeDTO) {
+    public ResumeDTO updateResume(Integer id, ResumeUpdateDTO resumeDTO) {
         Resume resume = resumeRepository.findById(id).orElse(null);
         if (resume == null) {
             return null;
@@ -67,7 +68,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDTO toDto(Resume resume) {
-        return new ResumeDTO(resume);
+        ResumeDTO resumeDTO = new ResumeDTO(resume);
+        resumeDTO.setWorkerId(resume.getWorker().getId());
+        return resumeDTO;
     }
 
     @Override
