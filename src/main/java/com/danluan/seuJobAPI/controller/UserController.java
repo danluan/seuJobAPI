@@ -1,6 +1,7 @@
 package com.danluan.seuJobAPI.controller;
 
 import com.danluan.seuJobAPI.exception.LoginAlreadyInUse;
+import com.danluan.seuJobAPI.model.dto.CredenciaisDTO;
 import com.danluan.seuJobAPI.model.dto.UserDTO;
 import com.danluan.seuJobAPI.service.UserService;
 import com.danluan.seuJobAPI.service.impl.UserServiceImpl;
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("{id}")
     public UserDTO getUserById(@PathVariable Integer id) {
         return userService.getUserDTOById(id);
+    }
+
+    @PostMapping("/getUser")
+    public UserDTO getUserById(@RequestBody CredenciaisDTO credenciais) {
+        return userService.getUserByLogin(credenciais.getLogin());
     }
 
     @PostMapping()

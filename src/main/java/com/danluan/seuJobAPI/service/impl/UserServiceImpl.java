@@ -104,6 +104,12 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    public UserDTO getUserByLogin(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
+        return userParaDTO(user);
+    }
+
     public UserDetails autenticar( User user ){
         UserDetails userDetails = loadUserByLogin(user.getLogin());
         boolean senhasBatem = passwordEncoder.matches( user.getPassword(), userDetails.getPassword());
