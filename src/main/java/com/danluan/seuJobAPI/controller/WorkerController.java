@@ -1,11 +1,9 @@
 package com.danluan.seuJobAPI.controller;
 
-import com.danluan.seuJobAPI.model.Worker;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class WorkerController {
 
     @GetMapping("/{id}")
     public WorkerDTO getWorkerById(@PathVariable Integer id) {
-        return workerService.getWorkerById(id);
+        return workerService.getWorkerDTOById(id);
     }
 
     @PostMapping

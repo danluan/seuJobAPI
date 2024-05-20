@@ -16,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class ResumeDTO {
     private Integer id;
+    private Integer workerId;
     private String education;
     private String experience;
     private String skills;
