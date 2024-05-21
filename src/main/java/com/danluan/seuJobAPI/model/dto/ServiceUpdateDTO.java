@@ -11,24 +11,19 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceDTO {
-    private Integer id;
+public class ServiceUpdateDTO {
     private String title;
     private String description;
     private String location;
     private Float remuneration;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH:mm:ss")
-    private Date publishDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH:mm:ss")
     private Date endDate;
 
-    public ServiceDTO(Service service) {
-        this.id = service.getId();
+    public ServiceUpdateDTO(Service service) {
         this.title = service.getTitle();
         this.description = service.getDescription();
         this.location = service.getLocation();
         this.remuneration = service.getRemuneration();
-        this.publishDate = service.getPublishDate();
         this.endDate = service.getEndDate();
     }
 }
