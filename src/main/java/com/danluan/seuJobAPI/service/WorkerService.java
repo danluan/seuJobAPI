@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface WorkerService {
     WorkerDTO toDTO(Worker worker);
+    Worker toEntity(WorkerDTO workerDTO);
     List<WorkerDTO> getAllWorkers();
     WorkerDTO getWorkerDTOById(Integer id);
     Worker getWorkerById(Integer id);

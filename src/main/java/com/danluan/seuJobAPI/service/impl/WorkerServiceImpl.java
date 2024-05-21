@@ -91,7 +91,7 @@ public class WorkerServiceImpl implements WorkerService {
         return workerDTO;
     }
 
-    private static Worker toEntity (WorkerDTO workerDTO) {
+    public Worker toEntity (WorkerDTO workerDTO) {
         Worker worker = new Worker();
         worker.setId(workerDTO.getId());
         worker.getUser().setName(workerDTO.getName());

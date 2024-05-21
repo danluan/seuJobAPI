@@ -2,12 +2,16 @@ package com.danluan.seuJobAPI.model;
 
 import com.danluan.seuJobAPI.enums.ApplicationStatus;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "tb_application")
+@Setter
+@Getter
+@NoArgsConstructor
 public class Application {
 
     @Id
@@ -34,36 +38,4 @@ public class Application {
     @Column(name = "apply_date", updatable = false)
     private Date applyDate;
 
-    public Application() {
-    }
-
-    public Application(Job job, Worker worker) {
-        this.job = job;
-        this.worker = worker;
-    }
-
-
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
-
-    public Worker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(Worker worker) {
-        this.worker = worker;
-    }
-
-    public ApplicationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ApplicationStatus status) {
-        this.status = status;
-    }
 }
