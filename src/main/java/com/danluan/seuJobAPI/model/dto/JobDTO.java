@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobDTO {
+    Integer companyId;
     String description;
     String contract_type;
     String location;

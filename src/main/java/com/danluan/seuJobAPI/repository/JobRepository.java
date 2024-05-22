@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.repository;
 
+import com.danluan.seuJobAPI.model.Application;
 import com.danluan.seuJobAPI.model.Job;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,8 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
     @Query(value="select j from Job j where j.id = :id")
     Optional<Job> findById(Integer id);
+
+    @Query(value="select a from Application a where a.job.id = :id")
+    List<Application> getApplicationsByJob(Integer id);
 
 }

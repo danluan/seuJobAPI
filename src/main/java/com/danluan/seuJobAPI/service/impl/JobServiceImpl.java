@@ -2,14 +2,17 @@ package com.danluan.seuJobAPI.service.impl;
 
 import com.danluan.seuJobAPI.exception.JobNotFound;
 import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.model.Application;
 import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.Job;
 import com.danluan.seuJobAPI.model.User;
+import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.model.dto.FreelancerUpdateDTO;
 import com.danluan.seuJobAPI.model.dto.JobDTO;
 import com.danluan.seuJobAPI.repository.FreelancerRepository;
 import com.danluan.seuJobAPI.repository.JobRepository;
+import com.danluan.seuJobAPI.service.CompanyService;
 import com.danluan.seuJobAPI.service.FreelancerService;
 import com.danluan.seuJobAPI.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,13 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    private ApplicationServiceImpl applicationService;
+    @Autowired
+    private CompanyServiceImpl companyServiceImpl;
 
     @Override
     public List<JobDTO> getAllJobs() {
@@ -47,8 +57,10 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO save(JobDTO jobDTO) {
-        jobRepository.save(toEntity(jobDTO));
-        return jobDTO;
+        Job job = toEntity(jobDTO);
+        job.setCompany(companyService.toEntity(companyService.getCompanyById(jobDTO.getCompanyId())));
+        jobRepository.save(job);
+        return toDTO(job);
     }
 
     @Override
@@ -67,8 +79,16 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<ApplicationDTO> getApplicationsByJob(Integer id) {
+        List<Application> applications = jobRepository.getApplicationsByJob(id);
+
+        return applications.stream().map(applicationService::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public JobDTO toDTO(Job job) {
         JobDTO jobDTO = new JobDTO();
+        jobDTO.setCompanyId(job.getCompany() != null ? job.getCompany().getId() : null);
         jobDTO.setTitle(job.getTitle());
         jobDTO.setDescription(job.getDescription());
         jobDTO.setLocation(job.getLocation());
@@ -80,6 +100,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job toEntity(JobDTO jobDTO) {
-        return null;
+        Job job = new Job();
+        job.setTitle(jobDTO.getTitle());
+        job.setDescription(jobDTO.getDescription());
+        job.setLocation(jobDTO.getLocation());
+        job.setSalary(Float.parseFloat(jobDTO.getSalary()));
+        job.setContractType(jobDTO.getContract_type());
+        return job;
     }
+
+
 }

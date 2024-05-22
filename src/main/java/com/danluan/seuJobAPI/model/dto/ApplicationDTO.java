@@ -1,6 +1,7 @@
 package com.danluan.seuJobAPI.model.dto;
 
 import com.danluan.seuJobAPI.enums.ApplicationStatus;
+import com.danluan.seuJobAPI.model.Application;
 import lombok.*;
 
 import java.util.Date;

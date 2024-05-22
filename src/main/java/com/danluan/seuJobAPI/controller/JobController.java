@@ -4,10 +4,7 @@ import com.danluan.seuJobAPI.exception.JobNotFound;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
 import com.danluan.seuJobAPI.model.Job;
 import com.danluan.seuJobAPI.model.User;
-import com.danluan.seuJobAPI.model.dto.CredenciaisDTO;
-import com.danluan.seuJobAPI.model.dto.JobDTO;
-import com.danluan.seuJobAPI.model.dto.TokenDTO;
-import com.danluan.seuJobAPI.model.dto.UserDTO;
+import com.danluan.seuJobAPI.model.dto.*;
 import com.danluan.seuJobAPI.security.JwtService;
 import com.danluan.seuJobAPI.service.JobService;
 import com.danluan.seuJobAPI.service.impl.UserServiceImpl;
@@ -60,5 +57,10 @@ public class JobController {
         } catch (JobNotFound e) {
             return e.getMessage();
         }
+    }
+
+    @GetMapping("applications/{id}")
+    public List<ApplicationDTO> getApplications(@PathVariable Integer id) {
+        return jobService.getApplicationsByJob(id);
     }
 }
