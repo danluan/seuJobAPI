@@ -30,13 +30,13 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public Worker getWorkerById(Integer id) {
-        return workerRepository.findById(id)
+        return workerRepository.findWorkerAndApplicationByUserId(id)
                 .orElseThrow(() -> new EntityNotFoundException("Worker not found for ID: " + id));
     }
 
     @Override
     public WorkerDTO getWorkerDTOById(Integer id) {
-        Worker worker = workerRepository.findById(id)
+        Worker worker = workerRepository.findWorkerAndApplicationByUserId(id)
                 .orElseThrow(() -> new EntityNotFoundException("Worker not found for ID: " + id));
         return toDTO(worker);
     }
@@ -86,7 +86,7 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-        //TODO: adicionar Resume ao Worker por aqui att Daniel
+        workerDTO.setApplications(worker.getApplications());
         workerDTO.setResume(new ResumeUpdateDTO(worker.getResume()));
         return workerDTO;
     }
