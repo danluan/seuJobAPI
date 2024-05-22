@@ -2,11 +2,13 @@ package com.danluan.seuJobAPI.service.impl;
 
 import com.danluan.seuJobAPI.exception.LoginAlreadyInUse;
 import com.danluan.seuJobAPI.model.*;
+import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.model.dto.UserDTO;
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
 import com.danluan.seuJobAPI.repository.*;
 import com.danluan.seuJobAPI.service.UserService;
 import jakarta.transaction.Transactional;
+import org.hibernate.jdbc.Work;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,7 +97,27 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
-         String[] roles = user.isAdmin() ? new String[] { "ADMIN", "USER" } : new String[] { "USER" };
+        Optional<Freelancer> freelancer = freelancerRepository.findByUserId(user.getId());
+
+        Optional<Company> company = companyRepository.findByUserId(user.getId());
+
+        Optional<Worker> worker = workerRepository.findByUserId(user.getId());
+
+        String[] roles = new String[] { "USER" };
+
+        if (worker.isPresent())
+            roles = new String[]{"WORKER"};
+
+        if (company.isPresent())
+            roles = new String[] { "COMPANY" };
+
+        if (freelancer.isPresent())
+            roles = new String[] { "FREELANCER" };
+
+        if (user.isAdmin())
+            roles = new String[] { "ADMIN", "USER" };
+
+        System.out.println(Arrays.toString(roles));
 
         // Cria e retorna o objeto UserDetails com os detalhes do usuário
         return org.springframework.security.core.userdetails.User

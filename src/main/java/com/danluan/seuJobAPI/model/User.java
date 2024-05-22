@@ -45,8 +45,8 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Freelancer> freelancers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Admin> admins = new ArrayList<>();
+    @OneToOne(mappedBy = "user")
+    private Admin admin;
 
     public User(String name, String login, String email, String password, String phoneNumber) {
         this.name = name;
@@ -57,7 +57,7 @@ public class User {
     }
 
     public boolean isAdmin() {
-        return !admins.isEmpty();
+        return admin != null;
     }
 
     public List<String> getRolesByUser(){
@@ -71,7 +71,7 @@ public class User {
         if(!freelancers.isEmpty()){
             roles.add("FREELANCER");
         }
-        if(!admins.isEmpty()){
+        if(!(admin == null)){
             roles.add("ADMIN");
         }
         return roles;

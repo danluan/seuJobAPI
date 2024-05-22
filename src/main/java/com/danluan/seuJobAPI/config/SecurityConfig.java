@@ -42,12 +42,26 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authz) ->                                     
             authz
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/user/**")
+                    .hasAnyRole("USER")
+                    .requestMatchers("/api/worker/**")
+                    .hasAnyRole("ADMIN", "USER", "COMPANY", "FREELANCER", "WORKER")
+                    .requestMatchers("/api/company/**")
+                    .hasAnyRole("ADMIN", "COMPANY", "WORKER")
+                    .requestMatchers("/api/freelancer/**")
+                    .hasAnyRole("ADMIN", "FREELANCER", "WORKER")
+                    .requestMatchers("/api/resume/**")
+                    .hasAnyRole("ADMIN", "COMPANY", "FREELANCER", "WORKER")
+                    .requestMatchers("/api/job/**")
+                    .hasAnyRole("ADMIN", "COMPANY", "WORKER")
+                    .requestMatchers("/api/service/**")
+                    .hasAnyRole("ADMIN", "FREELANCER", "WORKER")
+                    .requestMatchers("/api/application/**")
+                    .hasAnyRole("ADMIN","WORKER", "FREELANCER", "COMPANY")
                     .anyRequest()
                     .permitAll()
-//                .requestMatchers("/api/auth/**")
-//                    .permitAll()
-//                .requestMatchers("/api/worker")
-//                    .hasRole("USER")
 
             )
             /*sessionManagement
