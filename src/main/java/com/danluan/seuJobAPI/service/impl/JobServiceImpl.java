@@ -58,7 +58,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO save(JobDTO jobDTO) {
         Job job = toEntity(jobDTO);
-        job.setCompany(companyService.toEntity(companyService.getCompanyById(jobDTO.getCompanyId())));
+        job.setCompany(companyService.getCompanyEntityById(jobDTO.getCompanyId()));
         jobRepository.save(job);
         return toDTO(job);
     }

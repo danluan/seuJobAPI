@@ -9,6 +9,7 @@ import java.util.List;
 public interface CompanyService {
     List<CompanyDTO> getAllCompanies();
     public CompanyDTO getCompanyById(Integer id);
+    public Company getCompanyEntityById(Integer id);
     CompanyDTO createCompany(CompanyDTO companyDTO);
     CompanyDTO updateCompany(CompanyUpdateDTO companyUpdateDTO);
     void deleteCompany(Integer id);

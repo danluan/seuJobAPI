@@ -9,22 +9,30 @@ import com.danluan.seuJobAPI.repository.CompanyRepository;
 import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.CompanyService;
+import com.danluan.seuJobAPI.service.JobService;
+import com.danluan.seuJobAPI.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jdk.jfr.Label;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Lazy
+    @Autowired
+    private JobService jobService;
 
     @Override
     public List<CompanyDTO> getAllCompanies() {
@@ -37,6 +45,12 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
         return toDTO(company);
+    }
+
+    @Override
+    public Company getCompanyEntityById(Integer id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
     }
 
     @Override
@@ -85,6 +99,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyDTO.setName(company.getUser().getName());
         companyDTO.setEmail(company.getUser().getEmail());
         companyDTO.setPhone(company.getUser().getPhoneNumber());
+        companyDTO.setJobs(company.getJobs().stream().map(jobService::toDTO).collect(Collectors.toList()));
         return companyDTO;
     }
 
