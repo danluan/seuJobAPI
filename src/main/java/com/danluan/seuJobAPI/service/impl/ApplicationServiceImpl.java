@@ -1,9 +1,11 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.enums.ApplicationStatus;
 import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Application;
 import com.danluan.seuJobAPI.model.Company;
 import com.danluan.seuJobAPI.model.User;
+import com.danluan.seuJobAPI.model.dto.ApplicationCreateDTO;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.CompanyDTO;
 import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
@@ -54,9 +56,19 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationDTO createApplication(ApplicationDTO applicationDTO) {
-        applicationRepository.save(toEntity(applicationDTO));
-        return applicationDTO;
+    public ApplicationDTO createApplication(ApplicationCreateDTO applicationCreateDTO) {
+        Application application = new Application();
+        if(applicationCreateDTO.getJobId() != null) {
+            application.setJob(jobService.getJobEntityById(applicationCreateDTO.getJobId()));
+            application.setWorker(workerService.getWorkerById(applicationCreateDTO.getWorkerId()));
+        } else if (applicationCreateDTO.getServiceId() != null) {
+            application.setService(serviceService.getServiceEntityById(applicationCreateDTO.getServiceId()));
+            application.setWorker(workerService.getWorkerById(applicationCreateDTO.getWorkerId()));
+        } else {
+            throw new EntityNotFoundException("Job or Service not found for ID: " + applicationCreateDTO.getJobId());
+        }
+        application.setStatus(ApplicationStatus.P);
+        return toDTO(applicationRepository.save(application));
     }
 
     @Override
@@ -74,9 +86,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     public ApplicationDTO toDTO(Application application) {
         ApplicationDTO applicationDTO = new ApplicationDTO();
         applicationDTO.setId(application.getId());
-        applicationDTO.setJob(jobService.getJobById(application.getJob().getId()));
-        applicationDTO.setWorker(workerService.getWorkerDTOById(application.getJob().getId()));
-        applicationDTO.setService(serviceService.getServiceById(application.getService().getId()));
+        if(application.getJob() != null)
+            applicationDTO.setJobId(application.getJob().getId());
+
+        if(application.getService() != null)
+            applicationDTO.setServiceId(application.getService().getId());
+        applicationDTO.setWorkerId(application.getWorker().getId());
         applicationDTO.setStatus(application.getStatus());
         applicationDTO.setDateApply(application.getApplyDate());
         return applicationDTO;
@@ -87,10 +102,10 @@ public class ApplicationServiceImpl implements ApplicationService {
         Application application = new Application();
         if (applicationDTO.getId() != 0)
             application.setId(applicationDTO.getId());
-        application.setJob(jobService.toEntity(applicationDTO.getJob()));
-        application.setWorker(workerService.toEntity(applicationDTO.getWorker()));
+        application.setJob(jobService.getJobEntityById(applicationDTO.getJobId()));
+        application.setWorker(workerService.getWorkerById(applicationDTO.getWorkerId()));
         application.setStatus(applicationDTO.getStatus());
-        application.setService(serviceService.toEntity(applicationDTO.getService()));
+        application.setService(serviceService.getServiceEntityById(applicationDTO.getServiceId()));
         application.setApplyDate(applicationDTO.getDateApply());
         return application;
     }

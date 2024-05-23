@@ -9,6 +9,7 @@ import java.util.List;
 public interface JobService {
     List<JobDTO> getAllJobs();
     JobDTO getJobById(Integer id);
+    Job getJobEntityById(Integer id);
     JobDTO save(JobDTO jobDTO);
     JobDTO updateJob(JobDTO jobDTO);
     void deleteJob(Integer id);

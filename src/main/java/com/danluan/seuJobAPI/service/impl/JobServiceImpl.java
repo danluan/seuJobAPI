@@ -56,6 +56,16 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public Job getJobEntityById(Integer id) {
+        Optional<Job> job = jobRepository.findById(id);
+        if (job.isPresent()) {
+            return job.get();
+        } else {
+            throw new JobNotFound();
+        }
+    }
+
+    @Override
     public JobDTO save(JobDTO jobDTO) {
         Job job = toEntity(jobDTO);
         job.setCompany(companyService.getCompanyEntityById(jobDTO.getCompanyId()));

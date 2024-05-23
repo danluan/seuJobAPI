@@ -9,6 +9,7 @@ import java.util.List;
 public interface ServiceService {
     List<ServiceDTO> getAllServices();
     ServiceDTO getServiceById(Integer id);
+    Service getServiceEntityById(Integer id);
     ServiceDTO createService(ServiceDTO serviceDTO);
     ServiceDTO updateService(Integer id, ServiceUpdateDTO serviceDTO);
     void deleteServiceById(Integer id);

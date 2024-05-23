@@ -2,6 +2,8 @@ package com.danluan.seuJobAPI.model.dto;
 
 import com.danluan.seuJobAPI.enums.ApplicationStatus;
 import com.danluan.seuJobAPI.model.Application;
+import com.danluan.seuJobAPI.model.Company;
+import com.danluan.seuJobAPI.model.Freelancer;
 import lombok.*;
 
 import java.util.Date;
@@ -12,10 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplicationDTO {
-    int id;
+    Integer id;
     ApplicationStatus status;
-    JobDTO job;
-    ServiceDTO service;
-    WorkerDTO worker;
+    Integer jobId;
+    Integer serviceId;
+    Integer workerId;
     Date dateApply;
 }

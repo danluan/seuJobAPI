@@ -29,6 +29,11 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public Service getServiceEntityById(Integer id) {
+        return null;
+    }
+
+    @Override
     public ServiceDTO createService(ServiceDTO serviceDTO) {
         Service service = this.toEntity(serviceDTO);
         return this.toDto(serviceRepository.save(service));

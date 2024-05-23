@@ -50,7 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company getCompanyEntityById(Integer id) {
         return companyRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Company not found for ID: " + id));
     }
 
     @Override
@@ -99,7 +99,8 @@ public class CompanyServiceImpl implements CompanyService {
         companyDTO.setName(company.getUser().getName());
         companyDTO.setEmail(company.getUser().getEmail());
         companyDTO.setPhone(company.getUser().getPhoneNumber());
-        companyDTO.setJobs(company.getJobs().stream().map(jobService::toDTO).collect(Collectors.toList()));
+        if(company.getJobs() != null)
+            companyDTO.setJobs(company.getJobs().stream().map(jobService::toDTO).collect(Collectors.toList()));
         return companyDTO;
     }
 

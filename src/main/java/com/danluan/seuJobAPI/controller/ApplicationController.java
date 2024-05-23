@@ -1,7 +1,9 @@
 package com.danluan.seuJobAPI.controller;
 
 import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
+import com.danluan.seuJobAPI.model.Application;
 import com.danluan.seuJobAPI.model.User;
+import com.danluan.seuJobAPI.model.dto.ApplicationCreateDTO;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.CredenciaisDTO;
 import com.danluan.seuJobAPI.model.dto.TokenDTO;
@@ -30,7 +32,9 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
-    public ApplicationDTO create(@RequestBody ApplicationDTO applicationDTO) { return applicationService.createApplication(applicationDTO); }
+    public ApplicationDTO create(@RequestBody ApplicationCreateDTO applicationDTO) {
+        return applicationService.createApplication(applicationDTO);
+    }
 
     @DeleteMapping("{id}")
     public String deleteApplication(@PathVariable Integer id) {
