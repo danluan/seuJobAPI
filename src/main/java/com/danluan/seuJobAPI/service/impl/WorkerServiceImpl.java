@@ -4,6 +4,7 @@ import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Resume;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.Worker;
+import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.ResumeUpdateDTO;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
@@ -86,7 +87,19 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-        workerDTO.setApplications(worker.getApplications());
+        workerDTO.setApplications(worker.getApplications().stream().map((application -> {
+            ApplicationDTO applicationDTO = new ApplicationDTO();
+            applicationDTO.setId(application.getId());
+            applicationDTO.setWorkerId(application.getWorker().getId());
+            if(application.getJob() != null)
+                applicationDTO.setJobId(application.getJob().getId());
+
+            if(application.getService() != null)
+                applicationDTO.setServiceId(application.getService().getId());
+            applicationDTO.setStatus(application.getStatus());
+            applicationDTO.setDateApply(application.getApplyDate());
+            return applicationDTO;
+        })).toList());
         workerDTO.setResume(
                 worker.getResume() != null ? new ResumeUpdateDTO(worker.getResume()) : null
         );

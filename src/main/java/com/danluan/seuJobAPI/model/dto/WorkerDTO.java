@@ -18,7 +18,7 @@ public class WorkerDTO {
     private String login;
     private String phone;
     private ResumeUpdateDTO resume;
-    private List<Application> applications;
+    private List<ApplicationDTO> applications;
 
     public WorkerDTO(Integer userId) {
         this.id = userId;
