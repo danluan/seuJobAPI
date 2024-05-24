@@ -87,19 +87,22 @@ public class WorkerServiceImpl implements WorkerService {
         workerDTO.setEmail(worker.getUser().getEmail());
         workerDTO.setLogin(worker.getUser().getLogin());
         workerDTO.setPhone(worker.getUser().getPhoneNumber());
-        workerDTO.setApplications(worker.getApplications().stream().map((application -> {
-            ApplicationDTO applicationDTO = new ApplicationDTO();
-            applicationDTO.setId(application.getId());
-            applicationDTO.setWorkerId(application.getWorker().getId());
-            if(application.getJob() != null)
-                applicationDTO.setJobId(application.getJob().getId());
 
-            if(application.getService() != null)
-                applicationDTO.setServiceId(application.getService().getId());
-            applicationDTO.setStatus(application.getStatus());
-            applicationDTO.setDateApply(application.getApplyDate());
-            return applicationDTO;
-        })).toList());
+        if (worker.getApplications() != null) {
+            workerDTO.setApplications(worker.getApplications().stream().map((application -> {
+                ApplicationDTO applicationDTO = new ApplicationDTO();
+                applicationDTO.setId(application.getId());
+                applicationDTO.setWorkerId(application.getWorker().getId());
+                if (application.getJob() != null)
+                    applicationDTO.setJobId(application.getJob().getId());
+
+                if (application.getService() != null)
+                    applicationDTO.setServiceId(application.getService().getId());
+                applicationDTO.setStatus(application.getStatus());
+                applicationDTO.setDateApply(application.getApplyDate());
+                return applicationDTO;
+            })).toList());
+        }
         workerDTO.setResume(
                 worker.getResume() != null ? new ResumeUpdateDTO(worker.getResume()) : null
         );

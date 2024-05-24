@@ -20,7 +20,7 @@ public class Company {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @Column(length = 14)
+    @Column(length = 18)
     private String cnpj;
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

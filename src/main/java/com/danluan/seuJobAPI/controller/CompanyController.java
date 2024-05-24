@@ -3,6 +3,7 @@ package com.danluan.seuJobAPI.controller;
 import com.danluan.seuJobAPI.model.dto.CompanyDTO;
 import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
 import com.danluan.seuJobAPI.service.CompanyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,12 @@ public class CompanyController {
     }
 
     @PostMapping
-    public CompanyDTO createCompany(@RequestBody CompanyDTO companyDTO) {
+    public CompanyDTO createCompany(@Valid @RequestBody CompanyDTO companyDTO) {
         return companyService.createCompany(companyDTO);
     }
 
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@RequestBody CompanyUpdateDTO companyUpdateDTO, @PathVariable Integer id) {
+    public CompanyDTO updateCompany(@Valid @RequestBody CompanyUpdateDTO companyUpdateDTO, @PathVariable Integer id) {
         companyUpdateDTO.setId(id);
         return companyService.updateCompany(companyUpdateDTO);
     }
