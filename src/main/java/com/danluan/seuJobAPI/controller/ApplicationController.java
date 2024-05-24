@@ -48,8 +48,8 @@ public class ApplicationController {
         return "Application edited.";
     }
 
-    @GetMapping()
-    public ApplicationDTO getAllApplications(@PathVariable Integer id) { return applicationService.getApplicationById(id); }
+    @GetMapping
+    public List<ApplicationDTO> getAllApplications() { return applicationService.getAllApplications(); }
 
     @GetMapping("{id}")
     public ApplicationDTO getApplication(@PathVariable Integer id) {
