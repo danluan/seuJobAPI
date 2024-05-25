@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.exception.EmailAlreadyInUse;
 import com.danluan.seuJobAPI.exception.LoginAlreadyInUse;
 import com.danluan.seuJobAPI.model.*;
 import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
@@ -45,9 +46,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO save(UserDTO userDTO) {
         if (!existsLogin(userDTO.getLogin())) {
-            User user = dtoParaUser(userDTO);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userParaDTO(userRepository.save(user));
+            if (!existsEmail(userDTO.getEmail())) {
+                User user = dtoParaUser(userDTO);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                return userParaDTO(userRepository.save(user));
+            } else {
+                throw new EmailAlreadyInUse();
+            }
         } else {
             throw new LoginAlreadyInUse();
         }
@@ -55,6 +60,10 @@ public class UserServiceImpl implements UserService {
 
     public Boolean existsLogin(String login) {
         return userRepository.findByLogin(login).isPresent();
+    }
+
+    public Boolean existsEmail(String email) {
+        return userRepository.findUserByEmail(email).isPresent();
     }
 
     private void extractRolesByList(UserDTO userDTO, User user) {
