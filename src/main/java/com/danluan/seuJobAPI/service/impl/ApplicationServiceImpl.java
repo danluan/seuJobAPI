@@ -1,6 +1,7 @@
 package com.danluan.seuJobAPI.service.impl;
 
 import com.danluan.seuJobAPI.enums.ApplicationStatus;
+import com.danluan.seuJobAPI.exception.WorkerAlreadyAppliedException;
 import com.danluan.seuJobAPI.model.Application;
 import com.danluan.seuJobAPI.model.dto.ApplicationCreateDTO;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
@@ -62,12 +63,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         application.setStatus(ApplicationStatus.P);
         return toDTO(applicationRepository.save(application));
-    }
-
-    @Override
-    public ApplicationDTO updateApplication(ApplicationDTO applicationDTO) {
-        applicationRepository.save(toEntity(applicationDTO));
-        return applicationDTO;
     }
 
     @Override

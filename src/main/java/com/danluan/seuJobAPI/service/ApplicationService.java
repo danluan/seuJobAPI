@@ -13,7 +13,6 @@ public interface ApplicationService {
     List<ApplicationDTO> getAllApplications();
     public ApplicationDTO getApplicationById(Integer id);
     ApplicationDTO createApplication(ApplicationCreateDTO applicationCreateDTO);
-    ApplicationDTO updateApplication(ApplicationDTO applicationDTO);
     void deleteApplication(Integer id);
     ApplicationDTO toDTO(Application application);
     Application toEntity(ApplicationDTO applicationDTO);

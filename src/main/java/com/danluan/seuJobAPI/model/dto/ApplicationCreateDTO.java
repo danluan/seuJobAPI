@@ -1,5 +1,6 @@
 package com.danluan.seuJobAPI.model.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -10,5 +11,6 @@ import lombok.*;
 public class ApplicationCreateDTO {
     private Integer jobId;
     private Integer serviceId;
+    @NotNull(message = "Worker ID is required")
     private Integer workerId;
 }
