@@ -70,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDTO updateCompany(CompanyUpdateDTO companyUpdateDTO) {
         Company company = companyRepository.findById(companyUpdateDTO.getId()).orElse(null);
         if(company == null) {
-            return null;
+            throw new EntityNotFoundException("Company not found for ID: " + companyUpdateDTO.getId());
         }
 
         company.setCnpj(companyUpdateDTO.getCnpj());
@@ -86,7 +86,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void deleteCompany(Integer id) {
-        companyRepository.deleteById(id);
+        try {
+            Company company = companyRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found for ID: " + id));
+            companyRepository.delete(company);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Company not found for ID: " + id);
+        }
     }
 
     @Override
