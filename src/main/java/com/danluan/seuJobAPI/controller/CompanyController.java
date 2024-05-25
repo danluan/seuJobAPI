@@ -45,7 +45,7 @@ public class CompanyController {
             CompanyDTO createdCompany = companyService.createCompany(companyDTO);
             return new ResponseEntity<>(createdCompany, HttpStatus.CREATED);
         } catch (UserIdAlreadyInUse e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

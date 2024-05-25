@@ -51,7 +51,7 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDTO updateResume(Integer id, ResumeUpdateDTO resumeDTO) {
         Resume resume = resumeRepository.findById(id).orElse(null);
         if (resume == null) {
-            return null;
+            throw new EntityNotFoundException("Resume not found for ID: " + id);
         }
 
         resume.setSkills(resumeDTO.getSkills());
@@ -63,7 +63,12 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void deleteResume(Integer id) {
-        resumeRepository.deleteById(id);
+        try {
+            Resume resume = resumeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Resume not found for ID: " + id));
+            resumeRepository.delete(resume);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
