@@ -1,17 +1,10 @@
 package com.danluan.seuJobAPI.service.impl;
 
 import com.danluan.seuJobAPI.enums.ApplicationStatus;
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
 import com.danluan.seuJobAPI.model.Application;
-import com.danluan.seuJobAPI.model.Company;
-import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.dto.ApplicationCreateDTO;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
-import com.danluan.seuJobAPI.model.dto.CompanyDTO;
-import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
 import com.danluan.seuJobAPI.repository.ApplicationRepository;
-import com.danluan.seuJobAPI.repository.CompanyRepository;
-import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

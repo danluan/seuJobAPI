@@ -1,8 +1,7 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.danluan.seuJobAPI.exception.FreelancerNotFoundException;
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.exception.UserNotFoundException;
 import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.User;
@@ -10,7 +9,6 @@ import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.model.dto.FreelancerUpdateDTO;
 import com.danluan.seuJobAPI.repository.FreelancerRepository;
 import com.danluan.seuJobAPI.service.FreelancerService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,7 @@ public class FreelancerServiceImpl implements FreelancerService {
     @Override
     public FreelancerDTO createFreelancer(FreelancerDTO freelancerDTO) {
         if (freelancerRepository.findByUserId(freelancerDTO.getUserId()).isPresent()) {
-            throw new UserIdAlreadyInUse();
+            throw new UserIdAlreadyInUseException();
         }
 
         User user = userService.getUserById(freelancerDTO.getUserId());

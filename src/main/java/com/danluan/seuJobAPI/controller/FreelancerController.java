@@ -2,7 +2,7 @@ package com.danluan.seuJobAPI.controller;
 
 import com.danluan.seuJobAPI.exception.FreelancerNotFoundException;
 import com.danluan.seuJobAPI.exception.InvalidFreelancerException;
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.exception.UserNotFoundException;
 import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.service.FreelancerService;
@@ -50,7 +50,7 @@ public class FreelancerController {
         try {
             FreelancerDTO createdFreelancer = freelancerService.createFreelancer(freelancerDTO);
             return new ResponseEntity<>(createdFreelancer, HttpStatus.CREATED);
-        } catch (InvalidFreelancerException | UserIdAlreadyInUse e) {
+        } catch (InvalidFreelancerException | UserIdAlreadyInUseException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

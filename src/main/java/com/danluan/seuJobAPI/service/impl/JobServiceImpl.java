@@ -1,21 +1,16 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import com.danluan.seuJobAPI.exception.JobNotFound;
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.JobNotFoundException;
 import com.danluan.seuJobAPI.model.Application;
-import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.Job;
-import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
-import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
-import com.danluan.seuJobAPI.model.dto.FreelancerUpdateDTO;
 import com.danluan.seuJobAPI.model.dto.JobDTO;
-import com.danluan.seuJobAPI.repository.FreelancerRepository;
 import com.danluan.seuJobAPI.repository.JobRepository;
+import com.danluan.seuJobAPI.service.ApplicationService;
 import com.danluan.seuJobAPI.service.CompanyService;
-import com.danluan.seuJobAPI.service.FreelancerService;
 import com.danluan.seuJobAPI.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,12 +24,12 @@ public class JobServiceImpl implements JobService {
     private JobRepository jobRepository;
 
     @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
     private CompanyService companyService;
 
-    private ApplicationServiceImpl applicationService;
+    @Lazy
+    @Autowired
+    private ApplicationService applicationService;
+
     @Autowired
     private CompanyServiceImpl companyServiceImpl;
 
@@ -51,7 +46,7 @@ public class JobServiceImpl implements JobService {
         if (job.isPresent()) {
             return toDTO(job.get());
         } else {
-            throw new JobNotFound();
+            throw new JobNotFoundException();
         }
     }
 
@@ -61,7 +56,7 @@ public class JobServiceImpl implements JobService {
         if (job.isPresent()) {
             return job.get();
         } else {
-            throw new JobNotFound();
+            throw new JobNotFoundException();
         }
     }
 
@@ -84,7 +79,7 @@ public class JobServiceImpl implements JobService {
         if (job.isPresent()) {
             jobRepository.delete(job.get());
         } else {
-            throw new JobNotFound();
+            throw new JobNotFoundException();
         }
     }
 

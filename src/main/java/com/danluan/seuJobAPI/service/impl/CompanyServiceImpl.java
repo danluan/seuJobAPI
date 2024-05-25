@@ -1,23 +1,19 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.model.Company;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.dto.CompanyDTO;
 import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
 import com.danluan.seuJobAPI.repository.CompanyRepository;
 import com.danluan.seuJobAPI.repository.UserRepository;
-import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.CompanyService;
 import com.danluan.seuJobAPI.service.JobService;
 import com.danluan.seuJobAPI.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import jdk.jfr.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO createCompany(CompanyDTO companyDTO) {
         if(companyRepository.findByUserId(companyDTO.getUserId()).isPresent()) {
-            throw new UserIdAlreadyInUse();
+            throw new UserIdAlreadyInUseException();
         }
 
         User user = userService.getUserById(companyDTO.getUserId());

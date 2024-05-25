@@ -1,8 +1,8 @@
 package com.danluan.seuJobAPI.controller;
 
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.exception.UserNotFoundException;
-import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUseException;
 import com.danluan.seuJobAPI.exception.WorkerNotFoundException;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.service.WorkerService;
@@ -41,7 +41,7 @@ public class WorkerController {
         try {
             WorkerDTO createdWorker = workerService.createWorker(workerDTO);
             return new ResponseEntity<>(createdWorker, HttpStatus.CREATED);
-        } catch (UserIdAlreadyInUse | WorkerIdAlreadyInUse e) {
+        } catch (UserIdAlreadyInUseException | WorkerIdAlreadyInUseException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

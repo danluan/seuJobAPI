@@ -1,23 +1,17 @@
 package com.danluan.seuJobAPI.controller;
 
-import com.danluan.seuJobAPI.exception.JobNotFound;
-import com.danluan.seuJobAPI.exception.SenhaInvalidaException;
-import com.danluan.seuJobAPI.model.Job;
-import com.danluan.seuJobAPI.model.User;
-import com.danluan.seuJobAPI.model.dto.*;
+import com.danluan.seuJobAPI.exception.JobNotFoundException;
+import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
+import com.danluan.seuJobAPI.model.dto.JobDTO;
 import com.danluan.seuJobAPI.security.JwtService;
 import com.danluan.seuJobAPI.service.JobService;
-import com.danluan.seuJobAPI.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,34 +27,58 @@ public class JobController {
     private final JwtService jwtService;
 
     @GetMapping
-    public List<JobDTO> getAllJobs() {
-        return jobService.getAllJobs();
+    public ResponseEntity<List<JobDTO>> getAllJobs() {
+        try {
+            List<JobDTO> jobs = jobService.getAllJobs();
+            return new ResponseEntity<>(jobs, HttpStatus.OK);
+        } catch (JobNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("{id}")
-    public JobDTO getJobById(@PathVariable Integer id) {
-        return jobService.getJobById(id);
+    public ResponseEntity<JobDTO> getJobById(@PathVariable Integer id) {
+        try {
+            JobDTO job = jobService.getJobById(id);
+            return new ResponseEntity<>(job, HttpStatus.OK);
+        } catch (JobNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public JobDTO salvar(@RequestBody @Valid JobDTO job) {
-        return jobService.save(job);
+    @PostMapping
+    public ResponseEntity<JobDTO> salvar(@RequestBody @Valid JobDTO job) {
+        try {
+            JobDTO createdJob = jobService.save(job);
+            return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String delete(@PathVariable Integer id) {
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             jobService.deleteJob(id);
-            return "Job deleted";
-        } catch (JobNotFound e) {
-            return e.getMessage();
+            return new ResponseEntity<>("Job deleted", HttpStatus.NO_CONTENT);
+        } catch (JobNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("applications/{id}")
-    public List<ApplicationDTO> getApplications(@PathVariable Integer id) {
-        return jobService.getApplicationsByJob(id);
+    public ResponseEntity<List<ApplicationDTO>> getApplications(@PathVariable Integer id) {
+        try {
+            List<ApplicationDTO> applications = jobService.getApplicationsByJob(id);
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.exception.UserNotFoundException;
 import com.danluan.seuJobAPI.exception.WorkerNotFoundException;
 import com.danluan.seuJobAPI.model.Resume;
@@ -50,7 +50,7 @@ public class WorkerServiceImpl implements WorkerService {
     @Override
     public WorkerDTO createWorker(WorkerDTO workerDTO) {
         if(workerRepository.findByUserId(workerDTO.getUserId()).isPresent()) {
-            throw new UserIdAlreadyInUse();
+            throw new UserIdAlreadyInUseException();
         }
         User user = userService.getUserById(workerDTO.getUserId());
 

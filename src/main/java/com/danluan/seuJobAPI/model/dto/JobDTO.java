@@ -1,5 +1,7 @@
 package com.danluan.seuJobAPI.model.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -8,11 +10,17 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobDTO {
+    @NotNull(message = "Company ID is required.")
     Integer companyId;
-    String description;
-    String contract_type;
-    String location;
+    @NotEmpty(message = "Title is required.")
     String title;
+    @NotEmpty(message = "Description is required.")
+    String description;
+    @NotEmpty(message = "Location is required.")
+    String location;
+    @NotEmpty(message = "Contract type is required.")
+    String contract_type;
+    @NotEmpty(message = "Salary is required.")
     String salary;
     String publish_date;
 }

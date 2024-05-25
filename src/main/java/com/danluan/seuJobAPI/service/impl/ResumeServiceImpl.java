@@ -1,6 +1,6 @@
 package com.danluan.seuJobAPI.service.impl;
 
-import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUseException;
 import com.danluan.seuJobAPI.model.Resume;
 import com.danluan.seuJobAPI.model.Worker;
 import com.danluan.seuJobAPI.model.dto.ResumeDTO;
@@ -35,7 +35,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public ResumeDTO createResume(ResumeDTO resumeDTO) {
         if (resumeRepository.findByWorkerId(resumeDTO.getWorkerId()).isPresent()) {
-            throw new WorkerIdAlreadyInUse();
+            throw new WorkerIdAlreadyInUseException();
         }
         Resume resume = this.toEntity(resumeDTO);
         Worker worker = workerService.getWorkerById(resumeDTO.getWorkerId());

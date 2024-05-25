@@ -1,6 +1,6 @@
 package com.danluan.seuJobAPI.controller;
 
-import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUseException;
 import com.danluan.seuJobAPI.model.dto.CompanyDTO;
 import com.danluan.seuJobAPI.model.dto.CompanyUpdateDTO;
 import com.danluan.seuJobAPI.service.CompanyService;
@@ -44,7 +44,7 @@ public class CompanyController {
         try {
             CompanyDTO createdCompany = companyService.createCompany(companyDTO);
             return new ResponseEntity<>(createdCompany, HttpStatus.CREATED);
-        } catch (UserIdAlreadyInUse e) {
+        } catch (UserIdAlreadyInUseException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
