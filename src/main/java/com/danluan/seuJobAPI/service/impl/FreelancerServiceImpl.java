@@ -1,6 +1,9 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
+import com.danluan.seuJobAPI.exception.FreelancerNotFoundException;
 import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserNotFoundException;
 import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
@@ -30,7 +33,7 @@ public class FreelancerServiceImpl implements FreelancerService {
     @Override
     public FreelancerDTO getFreelancerById(Integer id) {
         Freelancer freelancer = freelancerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Freelancer not found for ID: " + id));
+                .orElseThrow(FreelancerNotFoundException::new);
         return toDTO(freelancer);
     }
 
@@ -41,6 +44,10 @@ public class FreelancerServiceImpl implements FreelancerService {
         }
 
         User user = userService.getUserById(freelancerDTO.getUserId());
+
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
         Freelancer freelancer = new Freelancer(user);
 
         return this.toDTO(freelancerRepository.save(freelancer));
@@ -53,6 +60,7 @@ public class FreelancerServiceImpl implements FreelancerService {
 
     @Override
     public void deleteFreelancer(Integer id) {
+        freelancerRepository.findById(id).orElseThrow(FreelancerNotFoundException::new);
         freelancerRepository.deleteById(id);
     }
 

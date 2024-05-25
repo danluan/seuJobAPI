@@ -1,9 +1,16 @@
 package com.danluan.seuJobAPI.controller;
 
+import com.danluan.seuJobAPI.exception.FreelancerNotFoundException;
+import com.danluan.seuJobAPI.exception.InvalidFreelancerException;
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserNotFoundException;
 import com.danluan.seuJobAPI.model.dto.FreelancerDTO;
 import com.danluan.seuJobAPI.service.FreelancerService;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,23 +24,50 @@ public class FreelancerController {
     private FreelancerService freelancerService;
 
     @GetMapping("/{id}")
-    public FreelancerDTO getFreelancerById(@PathVariable Integer id) {
-        return freelancerService.getFreelancerById(id);
+    public ResponseEntity<FreelancerDTO> getFreelancerById(@PathVariable Integer id) {
+        try {
+            FreelancerDTO freelancerDTO = freelancerService.getFreelancerById(id);
+            return new ResponseEntity<>(freelancerDTO, HttpStatus.OK);
+        } catch (FreelancerNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
-    public List<FreelancerDTO> getFreelancers() {
-        return freelancerService.getAllFreelancers();
+    public ResponseEntity<List<FreelancerDTO>> getFreelancers() {
+        try {
+            List<FreelancerDTO> freelancers = freelancerService.getAllFreelancers();
+            return new ResponseEntity<>(freelancers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
-    public FreelancerDTO createFreelancer(@RequestBody FreelancerDTO freelancerDTO) {
-        return freelancerService.createFreelancer(freelancerDTO);
+    public ResponseEntity<FreelancerDTO> createFreelancer(@RequestBody @Valid FreelancerDTO freelancerDTO) {
+        try {
+            FreelancerDTO createdFreelancer = freelancerService.createFreelancer(freelancerDTO);
+            return new ResponseEntity<>(createdFreelancer, HttpStatus.CREATED);
+        } catch (InvalidFreelancerException | UserIdAlreadyInUse e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFreelancer(@PathVariable Integer id) {
-        freelancerService.deleteFreelancer(id);
+    public ResponseEntity<Void> deleteFreelancer(@PathVariable Integer id) {
+        try {
+            freelancerService.deleteFreelancer(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (FreelancerNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 }
