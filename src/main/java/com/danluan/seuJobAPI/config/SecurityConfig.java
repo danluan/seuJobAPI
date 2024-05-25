@@ -44,8 +44,10 @@ public class SecurityConfig {
             authz
                     .requestMatchers("/api/admin/**")
                     .hasRole("ADMIN")
+                    .requestMatchers("/api/user")
+                    .permitAll()
                     .requestMatchers("/api/user/**")
-                    .hasAnyRole("USER")
+                    .authenticated()
                     .requestMatchers("/api/worker/**")
                     .hasAnyRole("ADMIN", "USER", "COMPANY", "FREELANCER", "WORKER")
                     .requestMatchers("/api/company/**")
