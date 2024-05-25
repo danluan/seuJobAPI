@@ -1,12 +1,15 @@
 package com.danluan.seuJobAPI.service.impl;
 
 import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserNotFoundException;
+import com.danluan.seuJobAPI.exception.WorkerNotFoundException;
 import com.danluan.seuJobAPI.model.Resume;
 import com.danluan.seuJobAPI.model.User;
 import com.danluan.seuJobAPI.model.Worker;
 import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.ResumeUpdateDTO;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
+import com.danluan.seuJobAPI.repository.UserRepository;
 import com.danluan.seuJobAPI.repository.WorkerRepository;
 import com.danluan.seuJobAPI.service.WorkerService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +25,8 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<WorkerDTO> getAllWorkers() {
@@ -49,6 +54,11 @@ public class WorkerServiceImpl implements WorkerService {
         }
 
         User user = userService.getUserById(workerDTO.getUserId());
+
+        if(user == null) {
+            throw new UserNotFoundException();
+        }
+
         Worker worker = new Worker();
 
         worker.setUser(user);
@@ -61,14 +71,18 @@ public class WorkerServiceImpl implements WorkerService {
     public WorkerDTO updateWorker(WorkerDTO workerDTO) {
         Worker worker = workerRepository.findById(workerDTO.getId()).orElse(null);
         if (worker == null) {
-            return null;
+            throw new WorkerNotFoundException();
         }
         return toDTO(worker);
     }
 
     @Override
     public void deleteWorker(Integer id) {
-        workerRepository.deleteById(id);
+        try {
+            workerRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new WorkerNotFoundException();
+        }
     }
 
     @Override

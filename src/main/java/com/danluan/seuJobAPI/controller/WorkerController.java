@@ -1,9 +1,16 @@
 package com.danluan.seuJobAPI.controller;
 
+import com.danluan.seuJobAPI.exception.UserIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.UserNotFoundException;
+import com.danluan.seuJobAPI.exception.WorkerIdAlreadyInUse;
+import com.danluan.seuJobAPI.exception.WorkerNotFoundException;
 import com.danluan.seuJobAPI.model.dto.WorkerDTO;
 import com.danluan.seuJobAPI.service.WorkerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +28,47 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
-    public WorkerDTO getWorkerById(@PathVariable Integer id) {
-        return workerService.getWorkerDTOById(id);
+    public ResponseEntity<WorkerDTO> getWorkerById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(workerService.getWorkerDTOById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public WorkerDTO createWorker(@RequestBody WorkerDTO workerDTO) {
-        return workerService.createWorker(workerDTO);
+    public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid WorkerDTO workerDTO) {
+        try {
+            WorkerDTO createdWorker = workerService.createWorker(workerDTO);
+            return new ResponseEntity<>(createdWorker, HttpStatus.CREATED);
+        } catch (UserIdAlreadyInUse | WorkerIdAlreadyInUse e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping
-    public WorkerDTO updateWorker(@RequestBody WorkerDTO workerDTO) {
-        return workerService.updateWorker(workerDTO);
+    public ResponseEntity<WorkerDTO> updateWorker(@RequestBody @Valid WorkerDTO workerDTO) {
+        try {
+            WorkerDTO workerUpdated = workerService.updateWorker(workerDTO);
+            return new ResponseEntity<>(workerUpdated, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public void deleteWorker(@PathVariable Integer id) {
-        workerService.deleteWorker(id);
+    public ResponseEntity<Void> deleteWorker(@PathVariable Integer id) {
+        try {
+            workerService.deleteWorker(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (WorkerNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
