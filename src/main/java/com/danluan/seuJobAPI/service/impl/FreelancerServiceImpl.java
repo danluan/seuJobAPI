@@ -38,6 +38,12 @@ public class FreelancerServiceImpl implements FreelancerService {
     }
 
     @Override
+    public Freelancer getFreelancerEntityById(Integer freelancerId) {
+        return freelancerRepository.findById(freelancerId)
+                .orElseThrow(FreelancerNotFoundException::new);
+    }
+
+    @Override
     public FreelancerDTO createFreelancer(FreelancerDTO freelancerDTO) {
         if (freelancerRepository.findByUserId(freelancerDTO.getUserId()).isPresent()) {
             throw new UserIdAlreadyInUse();

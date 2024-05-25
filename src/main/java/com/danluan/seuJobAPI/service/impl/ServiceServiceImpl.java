@@ -1,5 +1,7 @@
 package com.danluan.seuJobAPI.service.impl;
 
+import com.danluan.seuJobAPI.exception.ServiceNotFoundException;
+import com.danluan.seuJobAPI.model.Freelancer;
 import com.danluan.seuJobAPI.model.Service;
 import com.danluan.seuJobAPI.model.dto.ServiceDTO;
 import com.danluan.seuJobAPI.model.dto.ServiceUpdateDTO;
@@ -15,6 +17,8 @@ import java.util.List;
 public class ServiceServiceImpl implements ServiceService {
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private FreelancerServiceImpl freelancerServiceImpl;
 
     @Override
     public List<ServiceDTO> getAllServices() {
@@ -24,19 +28,21 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public ServiceDTO getServiceById(Integer id) {
-        Service service = serviceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Service not found for ID: " + id));
+        Service service = serviceRepository.findById(id).orElseThrow(ServiceNotFoundException::new);
         return toDto(service);
     }
 
     @Override
     public Service getServiceEntityById(Integer id) {
-        return null;
+        return serviceRepository.findById(id).orElseThrow(ServiceNotFoundException::new);
     }
 
     @Override
     public ServiceDTO createService(ServiceDTO serviceDTO) {
-        Service service = this.toEntity(serviceDTO);
-        return this.toDto(serviceRepository.save(service));
+        Service service = toEntity(serviceDTO);
+        Freelancer freelancer = freelancerServiceImpl.getFreelancerEntityById(serviceDTO.getFreelancerId());
+        service.setFreelancer(freelancer);
+        return toDto(serviceRepository.save(service));
     }
 
     @Override
@@ -44,7 +50,7 @@ public class ServiceServiceImpl implements ServiceService {
         Service service = serviceRepository.findById(id).orElse(null);
 
         if (service == null) {
-            return null;
+            throw new ServiceNotFoundException();
         }
 
         service.setTitle(serviceDTO.getTitle());
@@ -58,6 +64,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void deleteServiceById(Integer id) {
+        serviceRepository.findById(id).orElseThrow(ServiceNotFoundException::new);
         serviceRepository.deleteById(id);
     }
 
@@ -69,6 +76,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public Service toEntity(ServiceDTO serviceDTO) {
         Service service = new Service();
+        service.setFreelancer(freelancerServiceImpl.getFreelancerEntityById(serviceDTO.getFreelancerId()));
         service.setId(serviceDTO.getId());
         service.setLocation(serviceDTO.getLocation());
         service.setTitle(serviceDTO.getTitle());
