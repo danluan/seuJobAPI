@@ -70,7 +70,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDTO updateJob(JobDTO jobDTO) {
-        return null;
+        Job job = jobRepository.findById(jobDTO.getId()).orElseThrow(JobNotFoundException::new);
+        job.setTitle(jobDTO.getTitle());
+        job.setDescription(jobDTO.getDescription());
+        job.setLocation(jobDTO.getLocation());
+        job.setSalary(Float.parseFloat(jobDTO.getSalary()));
+        job.setContractType(jobDTO.getContract_type());
+        jobRepository.save(job);
+        return toDTO(job);
     }
 
     @Override
@@ -93,6 +100,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO toDTO(Job job) {
         JobDTO jobDTO = new JobDTO();
+        jobDTO.setId(job.getId());
         jobDTO.setCompanyId(job.getCompany() != null ? job.getCompany().getId() : null);
         jobDTO.setTitle(job.getTitle());
         jobDTO.setDescription(job.getDescription());

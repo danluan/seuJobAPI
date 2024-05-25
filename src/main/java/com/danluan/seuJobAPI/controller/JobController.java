@@ -5,6 +5,7 @@ import com.danluan.seuJobAPI.model.dto.ApplicationDTO;
 import com.danluan.seuJobAPI.model.dto.JobDTO;
 import com.danluan.seuJobAPI.security.JwtService;
 import com.danluan.seuJobAPI.service.JobService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,6 @@ public class JobController {
         try {
             List<JobDTO> jobs = jobService.getAllJobs();
             return new ResponseEntity<>(jobs, HttpStatus.OK);
-        } catch (JobNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -55,6 +54,21 @@ public class JobController {
         try {
             JobDTO createdJob = jobService.save(job);
             return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<JobDTO> update(@PathVariable Integer id, @RequestBody @Valid JobDTO job) {
+        try {
+            job.setId(id);
+            JobDTO updatedJob = jobService.updateJob(job);
+            return new ResponseEntity<>(updatedJob, HttpStatus.OK);
+        } catch (JobNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -10,6 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobDTO {
+    Integer id;
+
     @NotNull(message = "Company ID is required.")
     Integer companyId;
     @NotEmpty(message = "Title is required.")
