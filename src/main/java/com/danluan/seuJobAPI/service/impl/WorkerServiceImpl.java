@@ -52,7 +52,6 @@ public class WorkerServiceImpl implements WorkerService {
         if(workerRepository.findByUserId(workerDTO.getUserId()).isPresent()) {
             throw new UserIdAlreadyInUse();
         }
-
         User user = userService.getUserById(workerDTO.getUserId());
 
         if(user == null) {
@@ -78,16 +77,14 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public void deleteWorker(Integer id) {
-        try {
-            workerRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new WorkerNotFoundException();
-        }
+        workerRepository.findById(id).orElseThrow(WorkerNotFoundException::new);
+        workerRepository.deleteById(id);
     }
 
     @Override
     public void updateWorkerResume(Integer id, Resume resume) {
         Worker user = workerRepository.findById(id).orElse(null);
+        assert user != null;
         user.setResume(resume);
         workerRepository.save(user);
     }
