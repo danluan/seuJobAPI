@@ -36,6 +36,15 @@ public class WorkerController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<WorkerDTO> getWorkerByUserId(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(workerService.getWorkerDTOById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid WorkerDTO workerDTO) {
         try {

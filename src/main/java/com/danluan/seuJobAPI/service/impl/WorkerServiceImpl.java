@@ -41,6 +41,12 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
+    public WorkerDTO getWorkerByUserId(Integer id) {
+        return toDTO(workerRepository.findByUserId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Worker not found for ID: " + id)));
+    }
+
+    @Override
     public WorkerDTO getWorkerDTOById(Integer id) {
         Worker worker = workerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Worker not found for ID: " + id));

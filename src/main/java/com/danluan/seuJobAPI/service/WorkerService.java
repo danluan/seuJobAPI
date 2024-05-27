@@ -11,6 +11,7 @@ public interface WorkerService {
     Worker toEntity(WorkerDTO workerDTO);
     List<WorkerDTO> getAllWorkers();
     WorkerDTO getWorkerDTOById(Integer id);
+    WorkerDTO getWorkerByUserId(Integer id);
     Worker getWorkerById(Integer id);
     WorkerDTO createWorker(WorkerDTO workerDTO);
     WorkerDTO updateWorker(WorkerDTO workerDTO);
