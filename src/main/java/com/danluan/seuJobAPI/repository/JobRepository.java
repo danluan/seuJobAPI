@@ -16,6 +16,9 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     @Query(value="select j from Job j where j.id = :id")
     Optional<Job> findById(Integer id);
 
+    @Query(value="select j from Job j inner join Application a on j = a.job where a.worker.id = :id")
+    Optional<Job> findByIdWorkerId(Integer id);
+
     @Query(value="select a from Application a where a.job.id = :id")
     List<Application> getApplicationsByJob(Integer id);
 

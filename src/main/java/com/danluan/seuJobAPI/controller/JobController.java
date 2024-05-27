@@ -49,6 +49,18 @@ public class JobController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<JobDTO>> getJobByWorkerId(@PathVariable Integer id) {
+        try {
+            List<JobDTO> jobs = jobService.getJobByWorkerId(id);
+            return new ResponseEntity<>(jobs, HttpStatus.OK);
+        } catch (JobNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<JobDTO> salvar(@RequestBody @Valid JobDTO job) {
         try {

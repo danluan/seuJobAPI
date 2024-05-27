@@ -41,6 +41,11 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<JobDTO> getJobByWorkerId(Integer id) {
+        return jobRepository.findByIdWorkerId(id).stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public JobDTO getJobById(Integer id) {
         Optional<Job> job = jobRepository.findById(id);
         if (job.isPresent()) {
