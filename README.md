@@ -55,6 +55,6 @@ Implementa um CRUD para cada entidade do banco (com exceção de Feedback), segu
 
 
 # Colaboradores:
-- [Breno Ferreira - 20200037661](https://github.com/bren1n)
-- [Caio Rebert - 20210068886](https://github.com/caiorebert)
-- [Daniel Luan - 20210053909](https://github.com/danluan)
+- [Breno Ferreira](https://github.com/bren1n)
+- [Caio Rebert](https://github.com/caiorebert)
+- [Daniel Luan](https://github.com/danluan)
